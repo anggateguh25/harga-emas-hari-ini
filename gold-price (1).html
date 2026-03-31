@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harga Emas Hari Ini</title>
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1473/1473504.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --gold-deep:    #8B6914;
+      --gold-rich:    #C9972A;
+      --gold-bright:  #E8B84B;
+      --gold-light:   #F5D782;
+      --gold-pale:    #FDF3D0;
+      --cream:        #FAF6EC;
+      --dark:         #1A1208;
+      --dark-mid:     #2C1F08;
+      --text-body:    #3D2B0A;
+      --text-muted:   #7A5C28;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--dark);
+      color: var(--gold-light);
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Background texture ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, #3a2406 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 100%, #2a1a04 0%, transparent 60%),
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 2px,
+          rgba(200,150,40,.03) 2px,
+          rgba(200,150,40,.03) 4px
+        );
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* ── Ornamental line ── */
+    .ornament {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .ornament::before,
+    .ornament::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-rich), transparent);
+    }
+    .ornament span {
+      font-size: 18px;
+      color: var(--gold-bright);
+      letter-spacing: 4px;
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+      animation: fadeDown .8s ease both;
+    }
+
+    .subtitle {
+      font-family: 'Raleway', sans-serif;
+      font-size: 11px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold-rich);
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(26px, 6vw, 44px);
+      font-weight: 600;
+      letter-spacing: 3px;
+      line-height: 1.15;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-bright) 50%, var(--gold-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    /* ── Loading state ── */
+    .loading {
+      text-align: center;
+      padding: 60px 0;
+    }
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 2px solid rgba(232,184,75,.15);
+      border-top-color: var(--gold-bright);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    .loading p {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: var(--text-muted);
+      font-size: 15px;
+      letter-spacing: 1px;
+    }
+
+    /* ── Error state ── */
+    .error-box {
+      border: 1px solid rgba(232,100,75,.3);
+      border-radius: 4px;
+      padding: 20px;
+      text-align: center;
+      color: #E87A4B;
+      font-size: 14px;
+      display: none;
+    }
+
+    /* ── Cards grid ── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, rgba(60,35,8,.9) 0%, rgba(30,18,4,.95) 100%);
+      border: 1px solid rgba(200,150,40,.2);
+      border-radius: 4px;
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: border-color .3s, transform .3s, box-shadow .3s;
+      animation: fadeUp .7s ease both;
+    }
+    .card:nth-child(1) { animation-delay: .1s; }
+    .card:nth-child(2) { animation-delay: .2s; }
+    .card:nth-child(3) { animation-delay: .3s; }
+    .card:nth-child(4) { animation-delay: .4s; }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; right: -60px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,184,75,.06) 0%, transparent 70%);
+      transition: transform .4s;
+    }
+
+    .card:hover {
+      border-color: rgba(200,150,40,.55);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.4), 0 0 20px rgba(200,150,40,.08);
+    }
+    .card:hover::before { opacity: 1; }
+    .card:hover::after { transform: scale(1.5); }
+
+    .card-brand {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold-rich);
+      margin-bottom: 16px;
+    }
+
+    .card-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 5vw, 38px);
+      font-weight: 600;
+      color: var(--gold-light);
+      line-height: 1;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .card-unit {
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold-rich);
+      margin-bottom: 22px;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 400;
+      opacity: 0.75;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-rich);
+      text-decoration: none;
+      transition: color .2s, gap .2s;
+    }
+    .card-link svg {
+      width: 10px;
+      height: 10px;
+      transition: transform .2s;
+    }
+    .card:hover .card-link {
+      color: var(--gold-bright);
+      gap: 10px;
+    }
+    .card:hover .card-link svg { transform: translate(2px, -2px); }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(200,150,40,.25), transparent);
+      margin: 36px 0;
+    }
+
+    /* ── Footer info ── */
+    .meta {
+      text-align: center;
+      animation: fadeUp .7s ease .5s both;
+    }
+
+    .meta-updated {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .meta-updated strong {
+      color: var(--gold-rich);
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    .meta-note {
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(122,92,40,.55);
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 480px) {
+      .wrapper { padding: 36px 16px 60px; }
+      .cards { grid-template-columns: 1fr; gap: 12px; }
+      .card { padding: 22px 20px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <p class="subtitle">Real-time Market Data</p>
+    <div class="ornament"><span>✦</span></div>
+    <h1>Harga Emas<br>Hari Ini</h1>
+    <div class="ornament" style="margin-top:12px; margin-bottom:12px;"><span>✦</span></div>
+    <p class="tagline">Live gold prices — updated automatically</p>
+  </header>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p>Memuat harga emas terkini…</p>
+  </div>
+
+  <div class="error-box" id="error">
+    Gagal memuat data. Silakan coba beberapa saat lagi.
+  </div>
+
+  <div id="content" style="display:none">
+    <div class="cards" id="cards"></div>
+
+    <div class="divider"></div>
+
+    <div class="meta">
+      <p class="meta-updated" id="lastUpdated"></p>
+      <p class="meta-note">Harga berlaku per 1 gram · Sumber resmi masing-masing brand</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const API = 'https://script.google.com/macros/s/AKfycbyKE_NIKrIdTo7JThintRzchC8pwMeLm7wM1j1lmcm48Pgt-gLCiMqpVHt7sY7InmfUKA/exec';
+
+  const BRANDS = {
+    antam:    { label: 'ANTAM',    url: 'https://www.logammulia.com/id/harga-emas-hari-ini' },
+    hrta:     { label: 'HARTADINATA',     url: 'https://hrtagold.id/en/gold-price' },
+    galeri24: { label: 'GALERI 24',url: 'https://galeri24.co.id/harga-emas' },
+    ubs:      { label: 'UBS',      url: 'https://ubslifestyle.com/harga-buyback-hari-ini/' },
+  };
+
+  function formatRp(num) {
+    return 'Rp ' + Number(num).toLocaleString('id-ID');
+  }
+
+  async function load() {
+    try {
+      const res = await fetch(API);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+
+      // Build cards
+      const cardsEl = document.getElementById('cards');
+      cardsEl.innerHTML = '';
+      for (const [key, info] of Object.entries(BRANDS)) {
+        const price = data.harga[key];
+        const card = document.createElement('a');
+        card.className = 'card';
+        card.href = info.url;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+        card.innerHTML = `
+          <p class="card-brand">${info.label}</p>
+          <p class="card-price">${formatRp(price)}</p>
+          <p class="card-unit">per gram · IDR</p>
+          <span class="card-link">
+            Lihat sumber
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M1 9L9 1M9 1H3M9 1V7"/>
+            </svg>
+          </span>
+        `;
+        cardsEl.appendChild(card);
+      }
+
+      // Last updated
+      document.getElementById('lastUpdated').innerHTML =
+        'Diperbarui: <strong>' + data.update_terakhir + '</strong>';
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('content').style.display = 'block';
+    } catch (e) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = 'block';
+      console.error(e);
+    }
+  }
+
+  load();
+</script>
+</body>
+</html>
