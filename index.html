@@ -49,7 +49,7 @@
 
     .wrapper {
       position: relative; z-index: 1;
-      max-width: 700px;
+      max-width: 720px;
       margin: 0 auto;
       padding: 48px 20px 80px;
     }
@@ -98,7 +98,7 @@
       padding: 20px; text-align: center; color: #E07A6A; font-size: 14px; display: none;
     }
 
-    /* ── Cards ── */
+    /* ── Cards grid ── */
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -116,10 +116,12 @@
       transition: border-color .3s, transform .3s, box-shadow .3s;
       animation: fadeUp .7s ease both;
     }
-    .card:nth-child(1) { animation-delay: .1s; }
-    .card:nth-child(2) { animation-delay: .2s; }
-    .card:nth-child(3) { animation-delay: .3s; }
-    .card:nth-child(4) { animation-delay: .4s; }
+    .card:nth-child(1) { animation-delay: .08s; }
+    .card:nth-child(2) { animation-delay: .16s; }
+    .card:nth-child(3) { animation-delay: .24s; }
+    .card:nth-child(4) { animation-delay: .32s; }
+    .card:nth-child(5) { animation-delay: .40s; }
+    .card:nth-child(6) { animation-delay: .48s; }
 
     /* top shimmer line */
     .card::before {
@@ -151,13 +153,13 @@
     }
     .card:hover .card-logo { opacity: 0.16; }
 
-    /* Brand label — leave room for logo on the right */
+    /* Brand label */
     .card-brand {
       font-family: 'Cinzel', serif;
       font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
       color: var(--gold-rich);
       margin-bottom: 20px;
-      padding-right: 64px; /* clear the logo */
+      padding-right: 64px;
     }
 
     /* Price label */
@@ -169,21 +171,21 @@
     /* Main price */
     .card-price {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(30px, 5.5vw, 40px);
+      font-size: clamp(28px, 5vw, 38px);
       font-weight: 600; color: var(--gold-light);
       line-height: 1; letter-spacing: 1px;
-      margin-bottom: 8px; /* FIX: was 3px — added breathing room */
+      margin-bottom: 8px;
     }
 
-    /* Per gram label */
+    /* Per gram */
     .card-unit {
       font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
       color: var(--gold-rich); opacity: 0.7;
       font-family: 'Raleway', sans-serif; font-weight: 400;
-      margin-bottom: 20px; /* FIX: clear gap before divider */
+      margin-bottom: 20px;
     }
 
-    /* Thin divider */
+    /* Thin divider inside card */
     .card-divider {
       height: 1px; margin-bottom: 14px;
       background: linear-gradient(90deg, rgba(200,150,40,.2), transparent);
@@ -241,7 +243,7 @@
     }
 
     /* ── Footer ── */
-    .meta { text-align: center; animation: fadeUp .7s ease .5s both; }
+    .meta { text-align: center; animation: fadeUp .7s ease .55s both; }
     .meta-updated {
       font-family: 'Cormorant Garamond', serif; font-style: italic;
       font-size: 14px; color: var(--text-muted); margin-bottom: 6px;
@@ -300,10 +302,36 @@
   const API = 'https://script.google.com/macros/s/AKfycbyKE_NIKrIdTo7JThintRzchC8pwMeLm7wM1j1lmcm48Pgt-gLCiMqpVHt7sY7InmfUKA/exec';
 
   const BRANDS = {
-    antam:    { label:'ANTAM',     url:'https://www.logammulia.com/id/harga-emas-hari-ini',  logo:'https://deltarekaprimasakti.com/wp-content/uploads/2018/12/ANTAM.png' },
-    hrta:     { label:'HRTA',      url:'https://hrtagold.id/en/gold-price',                  logo:'https://hrtagold.id/_next/image?url=%2Ficons%2Fhrtagold-main.png&w=3840&q=75' },
-    galeri24: { label:'GALERI 24', url:'https://galeri24.co.id/harga-emas',                  logo:'https://galeri24.co.id/favicon.png' },
-    ubs:      { label:'UBS',       url:'https://ubslifestyle.com/harga-buyback-hari-ini/',   logo:'https://lh6.googleusercontent.com/proxy/rMRhba7DZWDSHGF2URoAyHbDRbD3wTNBxoeHpOmYTtbLz6fspBxz87SiqvhwiDvIxHaezk0qqQOh54ZdS3Dw-0XWRmqLxdvZNw' },
+    antam:    {
+      label: 'ANTAM',
+      url:   'https://www.logammulia.com/id/harga-emas-hari-ini',
+      logo:  'https://lh3.googleusercontent.com/d/1vfH76Naqcrpg8a8YOwSHQN42s8wwY5WP'
+    },
+    hrta:     {
+      label: 'HARTADINATA ABADI',
+      url:   'https://hrtagold.id/en/gold-price',
+      logo:  'https://lh3.googleusercontent.com/d/1dfQiKNnkAflF6PH4ElVubIg2AUU9iTws'
+    },
+    galeri24: {
+      label: 'GALERI 24',
+      url:   'https://galeri24.co.id/harga-emas',
+      logo:  'https://lh3.googleusercontent.com/d/10ciu3RNrbQC-ym049ujJ0preZyhU09dp'
+    },
+    ubs:      {
+      label: 'UBS GOLD',
+      url:   'https://ubslifestyle.com/harga-buyback-hari-ini/',
+      logo:  'https://lh3.googleusercontent.com/d/1N2DmveENgzx0COW4V4SNvNJYz6VZ3Z_n'
+    },
+    lotus:    {
+      label: 'LOTUS ARCHI',
+      url:   'https://lotusarchi.com',
+      logo:  'https://lh3.googleusercontent.com/d/1QXdBUlszfDWLFClQHczggxeVCIgTsG2q'
+    },
+    waris:    {
+      label: 'WARIS SAMPOERNA',
+      url:   'https://sampoernagold.com',
+      logo:  'https://lh3.googleusercontent.com/d/1NgnDVzAZDnoNDfUS1GWQY7XGggcKRTY4'
+    },
   };
 
   const formatRp = n => 'Rp\u00A0' + Number(n).toLocaleString('id-ID');
@@ -326,6 +354,10 @@
 
       for (const [key, info] of Object.entries(BRANDS)) {
         const h = data.harga[key];
+
+        // Skip if brand not in API response yet
+        if (h === undefined) continue;
+
         const sekarang   = typeof h === 'object' ? h.sekarang   : h;
         const sebelumnya = typeof h === 'object' ? h.sebelumnya : null;
         const selisih    = typeof h === 'object' ? h.selisih    : null;
